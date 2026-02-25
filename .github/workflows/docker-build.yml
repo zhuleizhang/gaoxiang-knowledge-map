@@ -5,11 +5,12 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'README.md'
-      - '.gitignore'
+      - "README.md"
+      - ".gitignore"
 
 env:
   IMAGE_NAME: gaoxiang-knowledge-map
+  NAMESPACE: zhangzhulei
 
 jobs:
   build:
@@ -28,14 +29,14 @@ jobs:
         run: |
           # 获取短的 commit hash
           SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-          
+
           echo "Building image for ${IMAGE_NAME}:${SHORT_SHA}"
-          
+
           # 构建镜像
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${SHORT_SHA} -t ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest .
-          
+          docker build -t ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${SHORT_SHA} -t ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest .
+
           # 推送镜像
-          docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${SHORT_SHA}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
-          
+          docker push ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${SHORT_SHA}
+          docker push ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
+
           echo "Successfully pushed ${IMAGE_NAME}:${SHORT_SHA} and latest"
