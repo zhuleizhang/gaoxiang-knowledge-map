@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaoxiang-knowledge-map-deployment
+  labels:
+    app: gaoxiang-knowledge-map
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gaoxiang-knowledge-map
+  template:
+    metadata:
+      labels:
+        app: gaoxiang-knowledge-map
+    spec:
+      containers:
+        - name: gaoxiang-knowledge-map
+          image: zhangzhulei/gaoxiang-knowledge-map:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: 10m
+              memory: 50Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-gaoxiang-knowledge-map
+spec:
+  selector:
+    app: gaoxiang-knowledge-map
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      name: default
